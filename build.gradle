@@ -9,9 +9,14 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
+ext {
+    kotestVersion = '5.2.1'
+}
 
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation "io.kotest:kotest-runner-junit5:$kotestVersion"
+    testImplementation "io.kotest:kotest-assertions-core:$kotestVersion"
 }
 
 test {
