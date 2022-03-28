@@ -35,6 +35,7 @@ class RepositoryScoreBoardTest : DescribeSpec({
             val exception = shouldThrow<DuplicateMatchException> {
                 scoreBoard.startMatch(homeTeam, homeTeam)
             }
+
             exception.message shouldBe "Home Team and Away Team cannot be the same"
         }
 
@@ -55,6 +56,7 @@ class RepositoryScoreBoardTest : DescribeSpec({
                     val exception = shouldThrow<MatchInProgressException> {
                         scoreBoard.startMatch(firstTeam, secondTeam)
                     }
+
                     exception.message shouldBe "There is already game between given teams"
                 }
             }
@@ -76,6 +78,7 @@ class RepositoryScoreBoardTest : DescribeSpec({
             scoreBoard.finishMatch(firsMatch)
 
             val secondMatch = scoreBoard.startMatch(homeTeam, awayTeam)
+
             scoreBoard.getSummary() shouldContainExactly listOf(secondMatch)
         }
 

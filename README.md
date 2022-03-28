@@ -25,4 +25,4 @@ This is a library for managing scores between matches.
 6. Finished matches are flagged
 7. Team is distinguishable by its name = for simplicity of code
 8. Team cannot play with itself
-9. Score cannot be negative?
+9. Score cannot be negative
