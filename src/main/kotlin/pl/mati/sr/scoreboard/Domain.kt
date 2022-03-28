@@ -10,16 +10,25 @@ data class Team(val name: String) {
     }
 }
 
+data class Score(val homeTeamScore: Int, val awayTeamScore: Int) {
+    init {
+        if(homeTeamScore < 0 || awayTeamScore < 0) throw NegativeScoreException()
+    }
+}
+
 data class Match(
     val id: MatchId,
     val homeTeam: Team,
     val awayTeam: Team,
-    val homeTeamScore: Int = 0,
-    val awayTeamScore: Int = 0
+    val score: Score,
 )
 
 interface ScoreBoard {
     fun startAMatch(homeTeam: Team, awayTeam: Team): Match
+    fun updateScore(match: Match, newScore: Score): Match
 }
 
-class IllegalMatchException : IllegalArgumentException("Home Team and Away Team cannot be the same")
+class DuplicateMatchException : IllegalArgumentException("Home Team and Away Team cannot be the same")
+class MatchInProgressException : IllegalArgumentException("There is already game between given teams")
+class MatchNotFound(matchId: MatchId): IllegalStateException("Match with id $matchId has not been found")
+class NegativeScoreException: IllegalArgumentException("Score cannot be negative")
