@@ -3,6 +3,7 @@ package pl.mati.sr.scoreboard.repository
 import pl.mati.sr.scoreboard.MatchId
 import pl.mati.sr.scoreboard.MatchInProgressException
 import pl.mati.sr.scoreboard.Team
+import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
 class InMemoryMatchRepository : MatchRepository {
@@ -24,7 +25,7 @@ class InMemoryMatchRepository : MatchRepository {
         if (!dataBase.containsKey(modifiedMatch.id)) {
             return null
         }
-        dataBase[modifiedMatch.id] = modifiedMatch
+        dataBase[modifiedMatch.id] = modifiedMatch.copy(lastUpdated = Instant.now())
         return modifiedMatch
     }
 
