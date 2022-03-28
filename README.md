@@ -13,6 +13,7 @@ This is a library for managing scores between matches.
 3. Can there be multiple matches with the same configuration (home & away team)?
 4. Can a team play with itself (away == home)?
 5. Can score be negative?
+6. Should we leave finished matches or can we dispose them?
 
 ## Assumptions
 

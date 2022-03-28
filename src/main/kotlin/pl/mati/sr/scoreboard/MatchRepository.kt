@@ -5,8 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger
 interface MatchRepository {
     fun getMatch(matchId: MatchId): Match?
     fun createAMatch(homeTeam: Team, awayTeam: Team): Match
-    fun updateMatch(modifiedMatch: Match): Match
+    fun updateMatch(modifiedMatch: Match): Match?
     fun getAllActiveMatches(): List<Match>
+    fun deleteMatch(foundMatch: Match): Match?
 }
 
 class InMemoryMatchRepository : MatchRepository {
@@ -24,11 +25,16 @@ class InMemoryMatchRepository : MatchRepository {
         return newMatch
     }
 
-    override fun updateMatch(modifiedMatch: Match): Match {
+    override fun updateMatch(modifiedMatch: Match): Match? {
+        if(!dataBase.containsKey(modifiedMatch.id)) {
+            return null
+        }
         dataBase[modifiedMatch.id] = modifiedMatch
         return modifiedMatch
     }
 
     override fun getAllActiveMatches(): List<Match> = dataBase.values.toList()
+    override fun deleteMatch(foundMatch: Match) = dataBase.remove(foundMatch.id)
+
 
 }

@@ -9,11 +9,16 @@ class InMemoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBo
     override fun updateScore(match: Match, newScore: Score): Match {
         val foundMatch = matchRepository.getMatch(match.id) ?: throw MatchNotFound(match.id)
         val modifiedMatch = foundMatch.copy(score = newScore)
-        return matchRepository.updateMatch(modifiedMatch)
+        return matchRepository.updateMatch(modifiedMatch) ?: throw MatchNotFound(match.id)
     }
 
     override fun getSummary(): List<Match> {
         return matchRepository.getAllActiveMatches()
+    }
+
+    override fun finnishMatch(match: Match) {
+        val foundMatch = matchRepository.getMatch(match.id) ?: throw MatchNotFound(match.id)
+        matchRepository.deleteMatch(foundMatch)
     }
 }
 

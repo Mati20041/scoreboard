@@ -2,7 +2,9 @@ package pl.mati.sr.scoreboard
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
@@ -52,6 +54,17 @@ class InMemoryScoreBoardTest : DescribeSpec({
                 }
                 exception.message shouldBe "There is already game between given teams"
             }
+        }
+    }
+
+    describe("finishing match") {
+
+        it("finishes a match") {
+            val match = scoreBoard.startAMatch(homeTeam, awayTeam)
+            scoreBoard.getSummary().shouldNotBeEmpty()
+
+            scoreBoard.finnishMatch(match)
+            scoreBoard.getSummary().shouldBeEmpty()
         }
     }
 
