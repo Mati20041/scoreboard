@@ -21,3 +21,5 @@ data class Match(
 interface ScoreBoard {
     fun startAMatch(homeTeam: Team, awayTeam: Team): Match
 }
+
+class IllegalMatchException : IllegalArgumentException("Home Team and Away Team cannot be the same")

@@ -16,3 +16,4 @@ This is a library for managing scores between matches.
 ## Assumptions
 
 1. Team is distinguishable by its name = for simplicity of code
+2. Team cannot play with itself
