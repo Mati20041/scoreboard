@@ -1,9 +1,8 @@
 package pl.mati.sr.scoreboard
 
-class InMemoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBoard {
+private val summaryMatchComparator = compareByDescending<MatchDao> { it.score.totalScore }.thenByDescending { it.lastUpdated }
 
-    private val summaryMatchComparator = compareByDescending<MatchDao> { it.score.totalScore }.thenByDescending { it.lastUpdated }
-
+class RepositoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBoard {
     override fun startAMatch(homeTeam: Team, awayTeam: Team): Match {
         if (homeTeam == awayTeam) throw DuplicateMatchException()
         return matchRepository.createAMatch(homeTeam, awayTeam).toMatch()

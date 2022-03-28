@@ -12,11 +12,11 @@ import io.kotest.matchers.shouldNotBe
 val homeTeam = Team("HomeTeam")
 val awayTeam = Team("AwayTeam")
 
-class InMemoryScoreBoardTest : DescribeSpec({
-    var scoreBoard = InMemoryScoreBoard(InMemoryMatchRepository())
+class RepositoryScoreBoardTest : DescribeSpec({
+    var scoreBoard = RepositoryScoreBoard(InMemoryMatchRepository())
 
     afterEach {
-        scoreBoard = InMemoryScoreBoard(InMemoryMatchRepository())
+        scoreBoard = RepositoryScoreBoard(InMemoryMatchRepository())
     }
 
     describe("starting a match") {
