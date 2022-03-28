@@ -3,6 +3,7 @@ package pl.mati.sr.scoreboard
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
@@ -96,6 +97,23 @@ class InMemoryScoreBoardTest : DescribeSpec({
             result shouldContainExactlyInAnyOrder listOf(firstMatch, secondMatch)
         }
 
+        describe("summary order") {
+
+            it("returns matches sorted by the score") {
+                val matches = listOf(
+                    scoreBoard.startAMatch(Team("1"), Team("2")),
+                    scoreBoard.startAMatch(Team("3"), Team("4")),
+                    scoreBoard.startAMatch(Team("5"), Team("7")),
+                )
+                scoreBoard.updateScore(matches[0], Score(1, 1))
+                scoreBoard.updateScore(matches[1], Score(3, 3))
+                scoreBoard.updateScore(matches[2], Score(2, 2))
+
+                val summary = scoreBoard.getSummary()
+
+                summary.map { it.id } shouldContainExactly  listOf(matches[1].id, matches[2].id, matches[0].id)
+            }
+        }
     }
 
     describe("match score") {

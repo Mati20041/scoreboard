@@ -14,6 +14,7 @@ data class Score(val homeTeamScore: Int, val awayTeamScore: Int) {
     init {
         if(homeTeamScore < 0 || awayTeamScore < 0) throw NegativeScoreException()
     }
+    val totalScore = homeTeamScore + awayTeamScore
 }
 
 data class Match(

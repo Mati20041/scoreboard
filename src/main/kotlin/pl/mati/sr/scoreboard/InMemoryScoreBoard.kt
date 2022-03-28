@@ -13,7 +13,7 @@ class InMemoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBo
     }
 
     override fun getSummary(): List<Match> {
-        return matchRepository.getAllActiveMatches()
+        return matchRepository.getAllActiveMatches().sortedByDescending { it.score.totalScore }
     }
 
     override fun finnishMatch(match: Match) {
