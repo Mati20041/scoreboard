@@ -66,6 +66,23 @@ class InMemoryScoreBoardTest : DescribeSpec({
             scoreBoard.finnishMatch(match)
             scoreBoard.getSummary().shouldBeEmpty()
         }
+
+        it("fails on finishing a finished match") {
+            val match = scoreBoard.startAMatch(homeTeam, awayTeam)
+            scoreBoard.finnishMatch(match)
+
+            shouldThrow<MatchNotFound> {
+                scoreBoard.finnishMatch(match)
+            }
+        }
+
+        it("fails on finishing a not started match") {
+            val match = Match("id", homeTeam, awayTeam, score = Score(0, 0))
+
+            shouldThrow<MatchNotFound> {
+                scoreBoard.finnishMatch(match)
+            }
+        }
     }
 
     describe("matches summary") {
