@@ -75,8 +75,8 @@ class RepositoryScoreBoardTest : DescribeSpec({
         }
 
         it("can start next match if previous is finished") {
-            val firsMatch = scoreBoard.startMatch(homeTeam, awayTeam)
-            scoreBoard.finishMatch(firsMatch)
+            val firstMatch = scoreBoard.startMatch(homeTeam, awayTeam)
+            scoreBoard.finishMatch(firstMatch)
 
             val secondMatch = scoreBoard.startMatch(homeTeam, awayTeam)
 

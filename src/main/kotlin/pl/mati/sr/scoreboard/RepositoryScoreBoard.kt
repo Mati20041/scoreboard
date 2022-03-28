@@ -1,9 +1,9 @@
 package pl.mati.sr.scoreboard
 
-import pl.mati.sr.scoreboard.repository.MatchDao
+import pl.mati.sr.scoreboard.repository.MatchEntity
 import pl.mati.sr.scoreboard.repository.MatchRepository
 
-private val summaryMatchComparator = compareByDescending<MatchDao> { it.score.totalScore }.thenByDescending { it.lastUpdated }
+private val summaryMatchComparator = compareByDescending<MatchEntity> { it.score.totalScore }.thenByDescending { it.lastUpdated }
 
 class RepositoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBoard {
     override fun startMatch(homeTeam: Team, awayTeam: Team): Match {
@@ -22,7 +22,7 @@ class RepositoryScoreBoard(private val matchRepository: MatchRepository) : Score
         return matchRepository
             .getAllUnfinishedMatches()
             .sortedWith(summaryMatchComparator)
-            .map(MatchDao::toMatch)
+            .map(MatchEntity::toMatch)
     }
 
     override fun finishMatch(match: Match) {
@@ -34,4 +34,4 @@ class RepositoryScoreBoard(private val matchRepository: MatchRepository) : Score
     }
 }
 
-fun MatchDao.toMatch() = Match(id, homeTeam, awayTeam, score)
+fun MatchEntity.toMatch() = Match(id, homeTeam, awayTeam, score)

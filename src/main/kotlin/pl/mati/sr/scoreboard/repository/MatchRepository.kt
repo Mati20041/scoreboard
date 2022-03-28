@@ -5,7 +5,7 @@ import pl.mati.sr.scoreboard.Score
 import pl.mati.sr.scoreboard.Team
 import java.time.Instant
 
-data class MatchDao(
+data class MatchEntity(
     val id: MatchId,
     val homeTeam: Team,
     val awayTeam: Team,
@@ -15,11 +15,11 @@ data class MatchDao(
 )
 
 interface MatchRepository {
-    fun findMatch(matchId: MatchId): MatchDao?
-    fun createAMatch(homeTeam: Team, awayTeam: Team): MatchDao
-    fun updateMatch(modifiedMatch: MatchDao): MatchDao?
-    fun getAllUnfinishedMatches(): List<MatchDao>
-    fun deleteMatch(matchId: MatchId): MatchDao?
+    fun findMatch(matchId: MatchId): MatchEntity?
+    fun createAMatch(homeTeam: Team, awayTeam: Team): MatchEntity
+    fun updateMatch(modifiedMatch: MatchEntity): MatchEntity?
+    fun getAllUnfinishedMatches(): List<MatchEntity>
+    fun deleteMatch(matchId: MatchId): MatchEntity?
 }
 
 class MatchInProgressException : IllegalArgumentException("There is already game between given teams")

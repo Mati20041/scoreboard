@@ -6,21 +6,21 @@ import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
 class InMemoryMatchRepository : MatchRepository {
-    private val dataBase: MutableMap<String, MatchDao> = mutableMapOf()
+    private val dataBase: MutableMap<String, MatchEntity> = mutableMapOf()
     private val counter = AtomicInteger()
 
     override fun findMatch(matchId: MatchId) = dataBase[matchId]
 
-    override fun createAMatch(homeTeam: Team, awayTeam: Team): MatchDao {
+    override fun createAMatch(homeTeam: Team, awayTeam: Team): MatchEntity {
         if (getAllUnfinishedMatches().any { it.containsTeam(homeTeam) || it.containsTeam(awayTeam) }) {
             throw MatchInProgressException()
         }
-        val newMatch = MatchDao("id${counter.incrementAndGet()}", homeTeam, awayTeam)
+        val newMatch = MatchEntity("id${counter.incrementAndGet()}", homeTeam, awayTeam)
         dataBase[newMatch.id] = newMatch
         return newMatch
     }
 
-    override fun updateMatch(modifiedMatch: MatchDao): MatchDao? {
+    override fun updateMatch(modifiedMatch: MatchEntity): MatchEntity? {
         if (!dataBase.containsKey(modifiedMatch.id)) {
             return null
         }
@@ -32,6 +32,6 @@ class InMemoryMatchRepository : MatchRepository {
     override fun deleteMatch(matchId: MatchId) = dataBase.remove(matchId)
 }
 
-fun MatchDao.containsTeam(team: Team): Boolean {
+fun MatchEntity.containsTeam(team: Team): Boolean {
     return this.awayTeam == team || this.homeTeam == team
 }
