@@ -6,7 +6,6 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import pl.mati.sr.scoreboard.repository.InMemoryMatchRepository
@@ -66,9 +65,9 @@ class RepositoryScoreBoardTest : DescribeSpec({
 
         it("finishes a started match") {
             val match = scoreBoard.startMatch(homeTeam, awayTeam)
-            scoreBoard.getSummary().shouldNotBeEmpty()
 
             scoreBoard.finishMatch(match)
+
             scoreBoard.getSummary().shouldBeEmpty()
         }
 
@@ -133,8 +132,8 @@ class RepositoryScoreBoardTest : DescribeSpec({
                     scoreBoard.startMatch(Team("5"), Team("7")),
                 )
                 val greatestId = scoreBoard.updateMatchScore(matches[0], Score(10, 2)).id
-                val sameScoreId = scoreBoard.updateMatchScore(matches[1], Score(3, 5)).id
-                val lastUpdatedSameScoredId = scoreBoard.updateMatchScore(matches[2], Score(5, 3)).id
+                val sameScoreId = scoreBoard.updateMatchScore(matches[2], Score(5, 3)).id
+                val lastUpdatedSameScoredId = scoreBoard.updateMatchScore(matches[1], Score(3, 5)).id
 
                 val summary = scoreBoard.getSummary()
 

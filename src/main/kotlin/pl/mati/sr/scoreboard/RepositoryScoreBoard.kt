@@ -2,6 +2,7 @@ package pl.mati.sr.scoreboard
 
 import pl.mati.sr.scoreboard.repository.MatchDao
 import pl.mati.sr.scoreboard.repository.MatchRepository
+import java.time.Instant
 
 private val summaryMatchComparator = compareByDescending<MatchDao> { it.score.totalScore }.thenByDescending { it.lastUpdated }
 
@@ -13,7 +14,7 @@ class RepositoryScoreBoard(private val matchRepository: MatchRepository) : Score
 
     override fun updateMatchScore(match: Match, newScore: Score): Match {
         val foundedMatch = matchRepository.findMatch(match.id) ?: throw MatchNotFound(match.id)
-        val modifiedMatch = foundedMatch.copy(score = newScore)
+        val modifiedMatch = foundedMatch.copy(score = newScore, lastUpdated = Instant.now())
         val updatedMatch = matchRepository.updateMatch(modifiedMatch) ?: throw MatchNotFound(match.id)
         return updatedMatch.toMatch()
     }
