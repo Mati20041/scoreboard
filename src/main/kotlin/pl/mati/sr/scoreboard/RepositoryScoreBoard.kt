@@ -25,7 +25,7 @@ class RepositoryScoreBoard(private val matchRepository: MatchRepository) : Score
             .map(MatchDao::toMatch)
     }
 
-    override fun finnishMatch(match: Match) {
+    override fun finishMatch(match: Match) {
         val foundMatch = matchRepository.findMatch(match.id) ?: throw MatchNotFound(match.id)
         if(foundMatch.isFinished) {
             throw MatchAlreadyFinished()

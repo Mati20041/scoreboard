@@ -30,7 +30,7 @@ interface ScoreBoard {
     fun startMatch(homeTeam: Team, awayTeam: Team): Match
     fun updateMatchScore(match: Match, newScore: Score): Match
     fun getSummary(): List<Match>
-    fun finnishMatch(match: Match)
+    fun finishMatch(match: Match)
 }
 
 class DuplicateMatchException : IllegalArgumentException("Home Team and Away Team cannot be the same")

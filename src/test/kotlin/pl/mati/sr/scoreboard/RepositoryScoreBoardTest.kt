@@ -68,13 +68,13 @@ class RepositoryScoreBoardTest : DescribeSpec({
             val match = scoreBoard.startMatch(homeTeam, awayTeam)
             scoreBoard.getSummary().shouldNotBeEmpty()
 
-            scoreBoard.finnishMatch(match)
+            scoreBoard.finishMatch(match)
             scoreBoard.getSummary().shouldBeEmpty()
         }
 
         it("can start next match if previous is finished") {
             val firsMatch = scoreBoard.startMatch(homeTeam, awayTeam)
-            scoreBoard.finnishMatch(firsMatch)
+            scoreBoard.finishMatch(firsMatch)
 
             val secondMatch = scoreBoard.startMatch(homeTeam, awayTeam)
             scoreBoard.getSummary() shouldContainExactly listOf(secondMatch)
@@ -82,10 +82,10 @@ class RepositoryScoreBoardTest : DescribeSpec({
 
         it("fails on finishing a finished match") {
             val match = scoreBoard.startMatch(homeTeam, awayTeam)
-            scoreBoard.finnishMatch(match)
+            scoreBoard.finishMatch(match)
 
             shouldThrow<MatchAlreadyFinished> {
-                scoreBoard.finnishMatch(match)
+                scoreBoard.finishMatch(match)
             }
         }
 
@@ -93,7 +93,7 @@ class RepositoryScoreBoardTest : DescribeSpec({
             val match = Match("id", homeTeam, awayTeam, Score(0, 0))
 
             shouldThrow<MatchNotFound> {
-                scoreBoard.finnishMatch(match)
+                scoreBoard.finishMatch(match)
             }
         }
     }
