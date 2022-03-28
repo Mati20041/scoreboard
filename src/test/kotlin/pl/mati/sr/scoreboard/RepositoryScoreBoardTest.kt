@@ -2,6 +2,7 @@ package pl.mati.sr.scoreboard
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -43,30 +44,40 @@ class RepositoryScoreBoardTest : DescribeSpec({
                 scoreBoard.startMatch(homeTeam, awayTeam)
             }
 
-            it("same order") {
-                val exception = shouldThrow<MatchInProgressException> {
-                    scoreBoard.startMatch(homeTeam, awayTeam)
+            it("rejects starting a new match") {
+                listOf(
+                    homeTeam to awayTeam,
+                    awayTeam to homeTeam,
+                    homeTeam to Team("2"),
+                    awayTeam to Team("2"),
+                    Team("2") to homeTeam,
+                    Team("2") to awayTeam,
+                ).forAll { (firstTeam, secondTeam) ->
+                    val exception = shouldThrow<MatchInProgressException> {
+                        scoreBoard.startMatch(firstTeam, secondTeam)
+                    }
+                    exception.message shouldBe "There is already game between given teams"
                 }
-                exception.message shouldBe "There is already game between given teams"
-            }
-
-            it("opposite order") {
-                val exception = shouldThrow<MatchInProgressException> {
-                    scoreBoard.startMatch(homeTeam, awayTeam)
-                }
-                exception.message shouldBe "There is already game between given teams"
             }
         }
     }
 
     describe("finishing match") {
 
-        it("finishes a match") {
+        it("finishes a started match") {
             val match = scoreBoard.startMatch(homeTeam, awayTeam)
             scoreBoard.getSummary().shouldNotBeEmpty()
 
             scoreBoard.finnishMatch(match)
             scoreBoard.getSummary().shouldBeEmpty()
+        }
+
+        it("can start next match if previous is finished") {
+            val firsMatch = scoreBoard.startMatch(homeTeam, awayTeam)
+            scoreBoard.finnishMatch(firsMatch)
+
+            val secondMatch = scoreBoard.startMatch(homeTeam, awayTeam)
+            scoreBoard.getSummary() shouldContainExactly listOf(secondMatch)
         }
 
         it("fails on finishing a finished match") {

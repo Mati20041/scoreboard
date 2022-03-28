@@ -12,7 +12,7 @@ class InMemoryMatchRepository : MatchRepository {
     override fun findMatch(matchId: MatchId) = dataBase[matchId]
 
     override fun createAMatch(homeTeam: Team, awayTeam: Team): MatchDao {
-        if (dataBase.values.any { it.containsTeam(homeTeam) || it.containsTeam(awayTeam) }) {
+        if (getAllUnfinishedMatches().any { it.containsTeam(homeTeam) || it.containsTeam(awayTeam) }) {
             throw MatchInProgressException()
         }
         val newMatch = MatchDao("id${counter.incrementAndGet()}", homeTeam, awayTeam)
