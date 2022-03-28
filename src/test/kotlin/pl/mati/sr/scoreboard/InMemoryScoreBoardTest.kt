@@ -72,7 +72,7 @@ class InMemoryScoreBoardTest : DescribeSpec({
             val match = scoreBoard.startAMatch(homeTeam, awayTeam)
             scoreBoard.finnishMatch(match)
 
-            shouldThrow<MatchNotFound> {
+            shouldThrow<MatchAlreadyFinished> {
                 scoreBoard.finnishMatch(match)
             }
         }
@@ -113,6 +113,22 @@ class InMemoryScoreBoardTest : DescribeSpec({
 
                 summary.map { it.id } shouldContainExactly  listOf(matches[1].id, matches[2].id, matches[0].id)
             }
+
+            it("returns order by last updated if score is the same ") {
+                val matches = listOf(
+                    scoreBoard.startAMatch(Team("1"), Team("2")),
+                    scoreBoard.startAMatch(Team("3"), Team("4")),
+                    scoreBoard.startAMatch(Team("5"), Team("7")),
+                )
+                val greatestId = scoreBoard.updateScore(matches[0], Score(10, 2)).id
+                val sameScoreId = scoreBoard.updateScore(matches[1], Score(3, 5)).id
+                val lastUpdatedSameScoredId = scoreBoard.updateScore(matches[2], Score(5, 3)).id
+
+                val summary = scoreBoard.getSummary()
+
+                summary.map { it.id } shouldContainExactly  listOf(greatestId, lastUpdatedSameScoredId, sameScoreId)
+            }
+
         }
     }
 

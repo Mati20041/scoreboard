@@ -1,40 +1,52 @@
 package pl.mati.sr.scoreboard
 
+import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
+data class MatchDao(
+    val id: MatchId,
+    val homeTeam: Team,
+    val awayTeam: Team,
+    val score: Score = Score(0, 0),
+    val lastUpdated: Instant = Instant.now(),
+    val isFinished: Boolean = false,
+)
+
 interface MatchRepository {
-    fun getMatch(matchId: MatchId): Match?
-    fun createAMatch(homeTeam: Team, awayTeam: Team): Match
-    fun updateMatch(modifiedMatch: Match): Match?
-    fun getAllActiveMatches(): List<Match>
-    fun deleteMatch(foundMatch: Match): Match?
+    fun getMatch(matchId: MatchId): MatchDao?
+    fun createAMatch(homeTeam: Team, awayTeam: Team): MatchDao
+    fun updateMatch(modifiedMatch: MatchDao): MatchDao?
+    fun getAllUnfinishedMatches(): List<MatchDao>
+    fun deleteMatch(matchId: MatchId): MatchDao?
 }
 
 class InMemoryMatchRepository : MatchRepository {
-    private val dataBase: MutableMap<String, Match> = mutableMapOf()
+    private val dataBase: MutableMap<String, MatchDao> = mutableMapOf()
     private val counter = AtomicInteger()
 
     override fun getMatch(matchId: MatchId) = dataBase[matchId]
 
-    override fun createAMatch(homeTeam: Team, awayTeam: Team): Match {
+    override fun createAMatch(homeTeam: Team, awayTeam: Team): MatchDao {
         if (dataBase.values.any { it.containsTeam(homeTeam) || it.containsTeam(awayTeam) }) {
             throw MatchInProgressException()
         }
-        val newMatch = Match("id${counter.incrementAndGet()}", homeTeam, awayTeam, Score(0, 0))
+        val newMatch = MatchDao("id${counter.incrementAndGet()}", homeTeam, awayTeam)
         dataBase[newMatch.id] = newMatch
         return newMatch
     }
 
-    override fun updateMatch(modifiedMatch: Match): Match? {
-        if(!dataBase.containsKey(modifiedMatch.id)) {
+    override fun updateMatch(modifiedMatch: MatchDao): MatchDao? {
+        if (!dataBase.containsKey(modifiedMatch.id)) {
             return null
         }
         dataBase[modifiedMatch.id] = modifiedMatch
         return modifiedMatch
     }
 
-    override fun getAllActiveMatches(): List<Match> = dataBase.values.toList()
-    override fun deleteMatch(foundMatch: Match) = dataBase.remove(foundMatch.id)
+    override fun getAllUnfinishedMatches() = dataBase.values.filterNot { it.isFinished }.toList()
+    override fun deleteMatch(matchId: MatchId) = dataBase.remove(matchId)
+}
 
-
+fun MatchDao.containsTeam(team: Team): Boolean {
+    return this.awayTeam == team || this.homeTeam == team
 }

@@ -35,3 +35,4 @@ class DuplicateMatchException : IllegalArgumentException("Home Team and Away Tea
 class MatchInProgressException : IllegalArgumentException("There is already game between given teams")
 class MatchNotFound(matchId: MatchId): IllegalStateException("Match with id $matchId has not been found")
 class NegativeScoreException: IllegalArgumentException("Score cannot be negative")
+class MatchAlreadyFinished: IllegalStateException("Match is finished")
