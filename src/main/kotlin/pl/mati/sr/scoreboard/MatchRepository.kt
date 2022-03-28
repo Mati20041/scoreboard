@@ -6,6 +6,7 @@ interface MatchRepository {
     fun getMatch(matchId: MatchId): Match?
     fun createAMatch(homeTeam: Team, awayTeam: Team): Match
     fun updateMatch(modifiedMatch: Match): Match
+    fun getAllActiveMatches(): List<Match>
 }
 
 class InMemoryMatchRepository : MatchRepository {
@@ -27,5 +28,7 @@ class InMemoryMatchRepository : MatchRepository {
         dataBase[modifiedMatch.id] = modifiedMatch
         return modifiedMatch
     }
+
+    override fun getAllActiveMatches(): List<Match> = dataBase.values.toList()
 
 }

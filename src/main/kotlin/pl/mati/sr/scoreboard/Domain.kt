@@ -26,6 +26,7 @@ data class Match(
 interface ScoreBoard {
     fun startAMatch(homeTeam: Team, awayTeam: Team): Match
     fun updateScore(match: Match, newScore: Score): Match
+    fun getSummary(): List<Match>
 }
 
 class DuplicateMatchException : IllegalArgumentException("Home Team and Away Team cannot be the same")

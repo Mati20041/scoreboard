@@ -2,6 +2,7 @@ package pl.mati.sr.scoreboard
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
@@ -52,6 +53,19 @@ class InMemoryScoreBoardTest : DescribeSpec({
                 exception.message shouldBe "There is already game between given teams"
             }
         }
+    }
+
+    describe("matches summary") {
+
+        it("returns all started matches") {
+            val firstMatch = scoreBoard.startAMatch(Team("1"), Team("2"))
+            val secondMatch = scoreBoard.startAMatch(Team("3"), Team("4"))
+
+            val result = scoreBoard.getSummary()
+
+            result shouldContainExactlyInAnyOrder listOf(firstMatch, secondMatch)
+        }
+
     }
 
     describe("match score") {

@@ -11,6 +11,10 @@ class InMemoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBo
         val modifiedMatch = foundMatch.copy(score = newScore)
         return matchRepository.updateMatch(modifiedMatch)
     }
+
+    override fun getSummary(): List<Match> {
+        return matchRepository.getAllActiveMatches()
+    }
 }
 
 fun Match.containsTeam(team: Team): Boolean {
