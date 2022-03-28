@@ -1,7 +1,6 @@
 package pl.mati.sr.scoreboard.repository
 
 import pl.mati.sr.scoreboard.MatchId
-import pl.mati.sr.scoreboard.MatchInProgressException
 import pl.mati.sr.scoreboard.Team
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger

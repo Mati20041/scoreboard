@@ -34,6 +34,5 @@ interface ScoreBoard {
 }
 
 class DuplicateMatchException : IllegalArgumentException("Home Team and Away Team cannot be the same")
-class MatchInProgressException : IllegalArgumentException("There is already game between given teams")
 class MatchNotFound(matchId: MatchId): IllegalStateException("Match with id $matchId has not been found")
 class MatchAlreadyFinished: IllegalStateException("Match is finished")

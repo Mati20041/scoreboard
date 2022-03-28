@@ -22,3 +22,4 @@ interface MatchRepository {
     fun deleteMatch(matchId: MatchId): MatchDao?
 }
 
+class MatchInProgressException : IllegalArgumentException("There is already game between given teams")
