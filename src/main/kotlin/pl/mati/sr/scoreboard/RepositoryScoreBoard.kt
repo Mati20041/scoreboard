@@ -2,13 +2,14 @@ package pl.mati.sr.scoreboard
 
 import pl.mati.sr.scoreboard.repository.MatchEntity
 import pl.mati.sr.scoreboard.repository.MatchRepository
+import pl.mati.sr.scoreboard.repository.TeamEntity
 
 private val summaryMatchComparator = compareByDescending<MatchEntity> { it.score.totalScore }.thenByDescending { it.lastUpdated }
 
 class RepositoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBoard {
     override fun startMatch(homeTeam: Team, awayTeam: Team): Match {
         if (homeTeam == awayTeam) throw DuplicateMatchException()
-        return matchRepository.createAMatch(homeTeam, awayTeam).toMatch()
+        return matchRepository.createAMatch(homeTeam.toEntity(), awayTeam.toEntity()).toMatch()
     }
 
     override fun updateMatchScore(match: Match, newScore: Score): Match {
@@ -34,4 +35,6 @@ class RepositoryScoreBoard(private val matchRepository: MatchRepository) : Score
     }
 }
 
-fun MatchEntity.toMatch() = Match(id, homeTeam, awayTeam, score)
+fun MatchEntity.toMatch() = Match(id, homeTeam.toTeam(), awayTeam.toTeam(), score)
+fun TeamEntity.toTeam() = Team(teamName)
+fun Team.toEntity() = TeamEntity(name)

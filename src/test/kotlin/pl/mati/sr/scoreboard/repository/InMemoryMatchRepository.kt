@@ -1,7 +1,6 @@
 package pl.mati.sr.scoreboard.repository
 
 import pl.mati.sr.scoreboard.MatchId
-import pl.mati.sr.scoreboard.Team
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -11,7 +10,10 @@ class InMemoryMatchRepository : MatchRepository {
 
     override fun findMatch(matchId: MatchId) = dataBase[matchId]
 
-    override fun createAMatch(homeTeam: Team, awayTeam: Team): MatchEntity {
+    override fun createAMatch(homeTeam: TeamEntity, awayTeam: TeamEntity): MatchEntity {
+        // Usually this could be constrained by database, for ex if TeamEntity has currentMatch: MatchEntity
+        // reference/association we shouldn't be able to set it if it is not null. In NoSQL DBs
+        // this would be achieved by optimistic locking on multiple documents.
         if (getAllUnfinishedMatches().any { it.containsTeam(homeTeam) || it.containsTeam(awayTeam) }) {
             throw MatchInProgressException()
         }
@@ -32,6 +34,6 @@ class InMemoryMatchRepository : MatchRepository {
     override fun deleteMatch(matchId: MatchId) = dataBase.remove(matchId)
 }
 
-fun MatchEntity.containsTeam(team: Team): Boolean {
+fun MatchEntity.containsTeam(team: TeamEntity): Boolean {
     return this.awayTeam == team || this.homeTeam == team
 }
