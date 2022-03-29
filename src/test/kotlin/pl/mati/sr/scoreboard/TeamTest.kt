@@ -17,7 +17,7 @@ class TeamTest : DescribeSpec({
             val exception = shouldThrow<IllegalArgumentException> {
                 Team("")
             }
-            exception.message shouldBe "name cannot be empty"
+            exception.message shouldBe "Name cannot be empty"
         }
     }
 

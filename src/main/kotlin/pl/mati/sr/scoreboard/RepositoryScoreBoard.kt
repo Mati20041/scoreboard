@@ -14,11 +14,11 @@ class RepositoryScoreBoard(private val matchRepository: MatchRepository) : Score
     }
 
     override fun updateMatchScore(match: Match, newScore: Score): Match {
-        val foundedMatch = matchRepository.findMatch(match.id) ?: throw MatchNotFound(match.id)
-        if (foundedMatch.isFinished) {
+        val foundMatch = matchRepository.findMatch(match.id) ?: throw MatchNotFound(match.id)
+        if (foundMatch.isFinished) {
             throw MatchAlreadyFinished()
         }
-        val modifiedMatch = foundedMatch.copy(score = newScore)
+        val modifiedMatch = foundMatch.copy(score = newScore)
         val updatedMatch = matchRepository.updateMatch(modifiedMatch) ?: throw MatchNotFound(match.id)
         return updatedMatch.toMatch()
     }

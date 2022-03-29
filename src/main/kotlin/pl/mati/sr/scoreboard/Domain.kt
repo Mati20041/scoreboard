@@ -12,7 +12,7 @@ data class Match(
 data class Team(val name: String) {
     init {
         if (name.isEmpty()) {
-            throw IllegalArgumentException("name cannot be empty")
+            throw IllegalArgumentException("Name cannot be empty")
         }
     }
 }
