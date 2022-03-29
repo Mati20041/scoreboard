@@ -11,7 +11,7 @@ class InMemoryMatchRepository : MatchRepository {
     override fun findMatch(matchId: MatchId) = dataBase[matchId]
 
     override fun createAMatch(homeTeam: TeamEntity, awayTeam: TeamEntity): MatchEntity {
-        // Usually this could be constrained by database, for ex if TeamEntity has currentMatch: MatchEntity
+        // Usually this could be constrained by a database, for ex. if TeamEntity has `currentMatch: MatchEntity`
         // reference/association we shouldn't be able to set it if it is not null. In NoSQL DBs
         // this would be achieved by optimistic locking on multiple documents.
         if (getAllUnfinishedMatches().any { it.containsTeam(homeTeam) || it.containsTeam(awayTeam) }) {
