@@ -27,4 +27,5 @@ This is a library for managing scores between matches.
 7. Team is distinguishable by its name = for simplicity of code
 8. Team cannot play with itself
 9. Score cannot be negative
-10. For test purpose it doesn't need to be multithreaded
+10. For test purpose it doesn't need to be multithread
+11. Pagination is not needed
