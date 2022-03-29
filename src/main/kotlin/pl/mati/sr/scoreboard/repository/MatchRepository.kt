@@ -17,7 +17,7 @@ data class MatchEntity(
 
 interface MatchRepository {
     fun findMatch(matchId: MatchId): MatchEntity?
-    fun createAMatch(homeTeam: TeamEntity, awayTeam: TeamEntity): MatchEntity
+    fun createMatch(matchEntity: MatchEntity): MatchEntity
     fun updateMatch(modifiedMatch: MatchEntity): MatchEntity?
     fun getAllUnfinishedMatches(): List<MatchEntity>
     fun deleteMatch(matchId: MatchId): MatchEntity?

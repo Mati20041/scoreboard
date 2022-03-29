@@ -10,14 +10,14 @@ class InMemoryMatchRepository : MatchRepository {
 
     override fun findMatch(matchId: MatchId) = dataBase[matchId]
 
-    override fun createAMatch(homeTeam: TeamEntity, awayTeam: TeamEntity): MatchEntity {
+    override fun createMatch(matchEntity: MatchEntity): MatchEntity {
         // Usually this could be constrained by a database, for ex. if TeamEntity has `currentMatch: MatchEntity`
         // reference/association we shouldn't be able to set it if it is not null. In NoSQL DBs
         // this would be achieved by optimistic locking on multiple documents.
-        if (getAllUnfinishedMatches().any { it.containsTeam(homeTeam) || it.containsTeam(awayTeam) }) {
+        if (getAllUnfinishedMatches().any { it.containsTeam(matchEntity.homeTeam) || it.containsTeam(matchEntity.awayTeam) }) {
             throw TeamIsAssociatedWithUnfinishedMatch()
         }
-        val newMatch = MatchEntity("id${counter.incrementAndGet()}", homeTeam, awayTeam)
+        val newMatch = matchEntity.copy(id = "id${counter.incrementAndGet()}")
         dataBase[newMatch.id] = newMatch
         return newMatch
     }

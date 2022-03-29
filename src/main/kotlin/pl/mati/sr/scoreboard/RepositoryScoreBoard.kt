@@ -12,7 +12,7 @@ class RepositoryScoreBoard(private val matchRepository: MatchRepository) : Score
     override fun startMatch(homeTeam: Team, awayTeam: Team): Match {
         if (homeTeam == awayTeam) throw SameTeamInMatchException()
         try {
-            return matchRepository.createAMatch(homeTeam.toEntity(), awayTeam.toEntity()).toMatch()
+            return matchRepository.createMatch(MatchEntity("", homeTeam.toEntity(), awayTeam.toEntity())).toMatch()
         } catch (ex: TeamIsAssociatedWithUnfinishedMatch) {
             throw MatchInProgressException()
         }
