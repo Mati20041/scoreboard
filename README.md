@@ -14,6 +14,7 @@ This is a library for managing scores between matches.
 4. Can a team play with itself (away == home)?
 5. Can score be negative?
 6. Should we leave finished matches or can we dispose them?
+7. Can you update a finished match?
 
 ## Assumptions
 
