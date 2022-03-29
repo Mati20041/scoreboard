@@ -15,9 +15,9 @@ val homeTeam = Team("HomeTeam")
 val awayTeam = Team("AwayTeam")
 
 class RepositoryScoreBoardTest : DescribeSpec({
-    var scoreBoard = RepositoryScoreBoard(InMemoryMatchRepository())
+    lateinit var scoreBoard: RepositoryScoreBoard
 
-    afterEach {
+    beforeEach {
         scoreBoard = RepositoryScoreBoard(InMemoryMatchRepository())
     }
 
@@ -147,7 +147,7 @@ class RepositoryScoreBoardTest : DescribeSpec({
         }
     }
 
-    describe("match score") {
+    describe("updating match score") {
 
         it("updates match score") {
             val aMatch = scoreBoard.startMatch(homeTeam, awayTeam)
