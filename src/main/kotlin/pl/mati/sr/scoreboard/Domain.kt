@@ -33,6 +33,6 @@ interface ScoreBoard {
     fun finishMatch(match: Match)
 }
 
-class DuplicateMatchException : IllegalArgumentException("Home Team and Away Team cannot be the same")
+class SameTeamInMatchException : IllegalArgumentException("Home Team and Away Team cannot be the same")
 class MatchNotFound(matchId: MatchId): IllegalStateException("Match with id $matchId has not been found")
 class MatchAlreadyFinished: IllegalStateException("Match is finished")

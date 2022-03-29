@@ -32,20 +32,20 @@ class RepositoryScoreBoardTest : DescribeSpec({
             result.id shouldNotBe null
         }
 
-        it("throws error if home team is the same as away team") {
-            val exception = shouldThrow<DuplicateMatchException> {
+        it("fails if home team is the same as away team") {
+            val exception = shouldThrow<SameTeamInMatchException> {
                 scoreBoard.startMatch(homeTeam, homeTeam)
             }
 
             exception.message shouldBe "Home Team and Away Team cannot be the same"
         }
 
-        describe("rejects starting a match with the teams that are currently playing") {
+        describe("fails starting a match with the teams that are currently playing") {
             beforeEach {
                 scoreBoard.startMatch(homeTeam, awayTeam)
             }
 
-            it("rejects starting a new match") {
+            it("fails starting a new match") {
                 listOf(
                     homeTeam to awayTeam,
                     awayTeam to homeTeam,
@@ -156,6 +156,25 @@ class RepositoryScoreBoardTest : DescribeSpec({
             val updatedMatch = scoreBoard.updateMatchScore(aMatch, newScore)
 
             updatedMatch.score shouldBe newScore
+        }
+
+        it("fails on updating finished match") {
+            val aMatch = scoreBoard.startMatch(homeTeam, awayTeam)
+            scoreBoard.finishMatch(aMatch)
+            val newScore = Score(1, 3)
+
+            shouldThrow<MatchAlreadyFinished> {
+                scoreBoard.updateMatchScore(aMatch, newScore)
+            }
+        }
+
+        it("fails on updating match that doesn't exists in score board") {
+            val aMatch = Match("ID", Team("1"), Team("2"), Score(0,0))
+            val newScore = Score(1, 3)
+
+            shouldThrow<MatchNotFound> {
+                scoreBoard.updateMatchScore(aMatch, newScore)
+            }
         }
     }
 })

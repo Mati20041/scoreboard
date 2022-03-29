@@ -9,12 +9,15 @@ private val summaryMatchComparator =
 
 class RepositoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBoard {
     override fun startMatch(homeTeam: Team, awayTeam: Team): Match {
-        if (homeTeam == awayTeam) throw DuplicateMatchException()
+        if (homeTeam == awayTeam) throw SameTeamInMatchException()
         return matchRepository.createAMatch(homeTeam.toEntity(), awayTeam.toEntity()).toMatch()
     }
 
     override fun updateMatchScore(match: Match, newScore: Score): Match {
         val foundedMatch = matchRepository.findMatch(match.id) ?: throw MatchNotFound(match.id)
+        if (foundedMatch.isFinished) {
+            throw MatchAlreadyFinished()
+        }
         val modifiedMatch = foundedMatch.copy(score = newScore)
         val updatedMatch = matchRepository.updateMatch(modifiedMatch) ?: throw MatchNotFound(match.id)
         return updatedMatch.toMatch()
