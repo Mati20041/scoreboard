@@ -4,7 +4,8 @@ import pl.mati.sr.scoreboard.repository.MatchEntity
 import pl.mati.sr.scoreboard.repository.MatchRepository
 import pl.mati.sr.scoreboard.repository.TeamEntity
 
-private val summaryMatchComparator = compareByDescending<MatchEntity> { it.score.totalScore }.thenByDescending { it.lastUpdated }
+private val summaryMatchComparator =
+    compareByDescending<MatchEntity> { it.score.totalScore }.thenByDescending { it.lastUpdated }
 
 class RepositoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBoard {
     override fun startMatch(homeTeam: Team, awayTeam: Team): Match {
@@ -19,16 +20,14 @@ class RepositoryScoreBoard(private val matchRepository: MatchRepository) : Score
         return updatedMatch.toMatch()
     }
 
-    override fun getSummary(): List<Match> {
-        return matchRepository
-            .getAllUnfinishedMatches()
-            .sortedWith(summaryMatchComparator)
-            .map(MatchEntity::toMatch)
-    }
+    override fun getSummary(): List<Match> = matchRepository
+        .getAllUnfinishedMatches()
+        .sortedWith(summaryMatchComparator)
+        .map(MatchEntity::toMatch)
 
     override fun finishMatch(match: Match) {
         val foundMatch = matchRepository.findMatch(match.id) ?: throw MatchNotFound(match.id)
-        if(foundMatch.isFinished) {
+        if (foundMatch.isFinished) {
             throw MatchAlreadyFinished()
         }
         matchRepository.updateMatch(foundMatch.copy(isFinished = true))
