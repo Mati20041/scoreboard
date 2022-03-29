@@ -15,7 +15,7 @@ class InMemoryMatchRepository : MatchRepository {
         // reference/association we shouldn't be able to set it if it is not null. In NoSQL DBs
         // this would be achieved by optimistic locking on multiple documents.
         if (getAllUnfinishedMatches().any { it.containsTeam(homeTeam) || it.containsTeam(awayTeam) }) {
-            throw MatchInProgressException()
+            throw TeamIsAssociatedWithUnfinishedMatch()
         }
         val newMatch = MatchEntity("id${counter.incrementAndGet()}", homeTeam, awayTeam)
         dataBase[newMatch.id] = newMatch

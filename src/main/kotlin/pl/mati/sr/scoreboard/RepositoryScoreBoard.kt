@@ -3,6 +3,7 @@ package pl.mati.sr.scoreboard
 import pl.mati.sr.scoreboard.repository.MatchEntity
 import pl.mati.sr.scoreboard.repository.MatchRepository
 import pl.mati.sr.scoreboard.repository.TeamEntity
+import pl.mati.sr.scoreboard.repository.TeamIsAssociatedWithUnfinishedMatch
 
 private val summaryMatchComparator =
     compareByDescending<MatchEntity> { it.score.totalScore }.thenByDescending { it.lastUpdated }
@@ -10,7 +11,11 @@ private val summaryMatchComparator =
 class RepositoryScoreBoard(private val matchRepository: MatchRepository) : ScoreBoard {
     override fun startMatch(homeTeam: Team, awayTeam: Team): Match {
         if (homeTeam == awayTeam) throw SameTeamInMatchException()
-        return matchRepository.createAMatch(homeTeam.toEntity(), awayTeam.toEntity()).toMatch()
+        try {
+            return matchRepository.createAMatch(homeTeam.toEntity(), awayTeam.toEntity()).toMatch()
+        } catch (ex: TeamIsAssociatedWithUnfinishedMatch) {
+            throw MatchInProgressException()
+        }
     }
 
     override fun updateMatchScore(match: Match, newScore: Score): Match {

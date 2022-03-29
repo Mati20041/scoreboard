@@ -9,7 +9,6 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import pl.mati.sr.scoreboard.repository.InMemoryMatchRepository
-import pl.mati.sr.scoreboard.repository.MatchInProgressException
 
 val homeTeam = Team("HomeTeam")
 val awayTeam = Team("AwayTeam")

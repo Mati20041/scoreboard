@@ -23,4 +23,4 @@ interface MatchRepository {
     fun deleteMatch(matchId: MatchId): MatchEntity?
 }
 
-class MatchInProgressException : IllegalArgumentException("There is already game between given teams")
+class TeamIsAssociatedWithUnfinishedMatch: IllegalStateException()
